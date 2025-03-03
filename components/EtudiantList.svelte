@@ -28,7 +28,7 @@
       <li class="card">
         <div class="content">
           <h2>{etudiant.prenom} {etudiant.nom}</h2>
-          <!-- <p>{etudiant.email}</p> -->
+          <p>{etudiant.classe.code}</p>
           <button on:click={() => {deleteEtudiant(etudiant.id),fetchEtudiants()}}>Delete</button>
         </div>
       </li>

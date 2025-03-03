@@ -1,24 +1,37 @@
-// src/components/CreateProf.svelte
 <script>
   import { createProf } from '../src/store/prof';
   let prenom = '';
   let nom = '';
   let specialite = '';
+  let matieres = []; // String input for matieres
 
+  // Function to handle form submission
   async function handleCreate() {
-    await createProf(prenom, nom, specialite);
+    // Split the matieres string by commas and trim any spaces
+    const matieresArray = matieres.split(',').map(m => m.trim()).filter(m => m.length > 0);
+    
+    // You can now use matieresArray as an array of subjects (matieres)
+    await createProf(prenom, nom, matieresArray); // Pass matieresArray to createProf
     prenom = '';
     nom = '';
-    specialite = '';
+    matieres = ''; // Reset matieres input
   }
 </script>
-export createProf;
 
 <div class="create-form">
   <h2>Create New Professeur</h2>
   <input type="text" placeholder="Prenom" bind:value={prenom} />
   <input type="text" placeholder="Nom" bind:value={nom} />
-  <input type="text" placeholder="Specialite" bind:value={specialite} />
+  
+  <!-- New input for matieres with instructions -->
+  <label for="matieres">Matières (separated by commas):</label>
+  <input
+    type="text"
+    id="matieres"
+    placeholder="Ex: Math, Physics, Chemistry"
+    bind:value={matieres}
+  />
+  
   <button on:click={handleCreate}>Create</button>
 </div>
 
@@ -38,6 +51,13 @@ export createProf;
     margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 4px;
+  }
+
+  .create-form label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
   }
 
   .create-form button {

@@ -15,6 +15,7 @@ export async function fetchProfs() {
             id
             prenom
             nom
+            matiereslist
           }
         }
       `,
@@ -25,14 +26,14 @@ export async function fetchProfs() {
   profs.set(data.allProfesseur);
 }
 
-export async function createProf(prenom, nom, specialite) {
+export async function createProf(prenom, nom, matieres) {
   const response = await fetch(api, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       query: `
         mutation {
-          CreateProf(prenom: "${prenom}", nom: "${nom}") {
+          CreateProfesseur(prenom: "${prenom}", nom: "${nom}", matieres: ${JSON.stringify(matieres)}) {
             id
             prenom
             nom
@@ -42,9 +43,17 @@ export async function createProf(prenom, nom, specialite) {
     }),
   });
 
-  const { data } = await response.json();
-  profs.update((prevProfs) => [...prevProfs, data.createProf]);
+  const { data, errors } = await response.json();
+  if (errors) {
+    console.error(errors);
+    return;
+  }
+
+  console.log(data);
+  // Update the profs list with the newly created professor
+  profs.update((prevProfs) => [...prevProfs, data.CreateProfesseur]);
 }
+
 
 export async function deleteProf(id) {
   const response = await fetch('/graphql', {

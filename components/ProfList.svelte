@@ -39,6 +39,7 @@
       <li class="card">
         <div class="content">
           <h2>{prof.prenom} {prof.nom}</h2>
+          <p>{prof.matiereslist && Array.isArray(prof.matiereslist) ? prof.matiereslist.join(', ') : 'No subjects listed'}</p>
           <button on:click={() => deleteProf(prof.id)}>Delete</button>
         </div>
       </li>

@@ -1,15 +1,21 @@
-
 <script>
+  import { onMount } from 'svelte';
   import { createEtudiant } from '../src/store/etudiant';
+  import { fetchClasses, classes } from './../src/store/classe.js';
+
   let prenom = '';
   let nom = '';
-  let email = '';
+  let selectedClasse = '';  // Variable to hold the selected class
+
+  onMount(async () => {
+    fetchClasses();
+  });
 
   async function handleCreate() {
-    await createEtudiant(prenom, nom);
+    await createEtudiant(prenom, nom, selectedClasse); // Pass selectedClasse
     prenom = '';
     nom = '';
-    // email = '';
+    selectedClasse = '';
   }
 </script>
 
@@ -17,6 +23,14 @@
   <h2>Create New Etudiant</h2>
   <input type="text" placeholder="Prenom" bind:value={prenom} />
   <input type="text" placeholder="Nom" bind:value={nom} />
+  
+  <select bind:value={selectedClasse}>
+    <option value="" disabled selected>Select a class</option>
+    {#each $classes as classe}
+      <option value={classe.id}>{classe.code} (Niveau {classe.niveau})</option>
+    {/each}
+  </select>
+
   <!-- <input type="email" placeholder="Email" bind:value={email} /> -->
   <button on:click={handleCreate}>Create</button>
 </div>
@@ -31,7 +45,7 @@
     margin: 20px auto;
   }
 
-  .create-form input {
+  .create-form input, .create-form select {
     width: 100%;
     padding: 10px;
     margin: 10px 0;

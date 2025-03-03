@@ -17,7 +17,13 @@ export async function fetchEtudiants() {
             allEtudiants {
               id,
               nom,
-              prenom
+              prenom,
+              classe {
+                id
+                capacite
+                code
+                niveau
+              }
             }
           }
         `,
@@ -30,10 +36,9 @@ export async function fetchEtudiants() {
    
     const { data } = await response.json();
 
-    // Check if 'allEtudiants' exists in the response data
     if (data && data.allEtudiants) {
-      console.log(data.allEtudiants); // Log the list of students
-      etudiants.set(data.allEtudiants); // Set state with the list of students
+      console.log(data.allEtudiants);
+      etudiants.set(data.allEtudiants);
     } else {
       console.error("No students found in response data.");
     }
@@ -43,7 +48,7 @@ export async function fetchEtudiants() {
   }
 }
 
-export async function createEtudiant(prenom, nom, email, classeId) {
+export async function createEtudiant(prenom, nom, classeId) {
   try {
     const response = await fetch(api, {
       method: "POST",
@@ -53,7 +58,7 @@ export async function createEtudiant(prenom, nom, email, classeId) {
       body: JSON.stringify({
         query: `
           mutation {
-            CreateEtudiant(prenom: "${prenom}", nom: "${nom}", email: "${email}", classe: { id: ${classeId} }) {
+            CreateEtudiant(prenom: "${prenom}", nom: "${nom}", classeId: "${parseInt(classeId)}") {
               id
               prenom
               nom
@@ -68,7 +73,8 @@ export async function createEtudiant(prenom, nom, email, classeId) {
     }
 
     const data = await response.json();
-    etudiants.update(current => [...current, data.data.createEtudiant]);
+    console.log(data);
+    etudiants.update(current => [...current, data.createEtudiant]);
   } catch (error) {
     console.error('Error creating Etudiant:', error);
   }
@@ -95,7 +101,7 @@ export async function deleteEtudiant(id) {
     }
 
     const data = await response.json();
-    return data.data.deleteEtudiant; // Assuming the backend returns true or false on success/failure
+    return data.deleteEtudiant; // Assuming the backend returns true or false on success/failure
   } catch (error) {
     console.error('Error deleting Etudiant:', error);
   }

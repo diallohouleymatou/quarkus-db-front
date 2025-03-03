@@ -1,19 +1,26 @@
-// src/components/EtudiantList.svelte
 <script>
   import { onMount } from "svelte";
-  import { etudiants, fetchEtudiants, deleteEtudiant } from "../src/store/etudiant";
-
-  onMount(() => {
-    fetchEtudiants();
+  import { etudiants, fetchEtudiants, deleteEtudiant } from "./../src/store/etudiant.js";
+  let isLoading = true;
+  let error = null;
+  onMount(async () => {
+    try {
+      fetchEtudiants();
+    } catch (err) {
+      error = "Failed to fetch etudiants";
+    } finally {
+      isLoading = false;
+    }
   });
-
 </script>
 
 <main>
   <h1 class="title">Etudiants</h1>
 
-  {#if $etudiants.length === 0}
+  {#if isLoading}
     <p>Loading...</p>
+  {:else if error}
+    <p class="error">{error}</p>
   {/if}
 
   <ul class="list">
@@ -21,7 +28,7 @@
       <li class="card">
         <div class="content">
           <h2>{etudiant.prenom} {etudiant.nom}</h2>
-          <p>{etudiant.email}</p>
+          <!-- <p>{etudiant.email}</p> -->
           <button on:click={() => {deleteEtudiant(etudiant.id),fetchEtudiants()}}>Delete</button>
         </div>
       </li>

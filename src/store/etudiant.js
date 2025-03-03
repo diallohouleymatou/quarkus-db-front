@@ -15,7 +15,9 @@ export async function fetchEtudiants() {
         query: `
           query {
             allEtudiants {
-              id
+              id,
+              nom,
+              prenom
             }
           }
         `,
@@ -25,9 +27,17 @@ export async function fetchEtudiants() {
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
+   
+    const { data } = await response.json();
 
-    const data = await response.json();
-    etudiants.set(data.allEtudiants);
+    // Check if 'allEtudiants' exists in the response data
+    if (data && data.allEtudiants) {
+      console.log(data.allEtudiants); // Log the list of students
+      etudiants.set(data.allEtudiants); // Set state with the list of students
+    } else {
+      console.error("No students found in response data.");
+    }
+    
   } catch (error) {
     console.error('Error fetching Etudiants:', error);
   }
@@ -43,11 +53,10 @@ export async function createEtudiant(prenom, nom, email, classeId) {
       body: JSON.stringify({
         query: `
           mutation {
-            createEtudiant(prenom: "${prenom}", nom: "${nom}", email: "${email}", classe: { id: ${classeId} }) {
+            CreateEtudiant(prenom: "${prenom}", nom: "${nom}", email: "${email}", classe: { id: ${classeId} }) {
               id
               prenom
               nom
-              email
             }
           }
         `,

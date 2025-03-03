@@ -1,4 +1,4 @@
-// src/components/CreateEtudiant.svelte
+
 <script>
   import { createEtudiant } from '../src/store/etudiant';
   let prenom = '';
@@ -6,10 +6,10 @@
   let email = '';
 
   async function handleCreate() {
-    await createEtudiant(prenom, nom, email);
+    await createEtudiant(prenom, nom);
     prenom = '';
     nom = '';
-    email = '';
+    // email = '';
   }
 </script>
 
@@ -17,7 +17,7 @@
   <h2>Create New Etudiant</h2>
   <input type="text" placeholder="Prenom" bind:value={prenom} />
   <input type="text" placeholder="Nom" bind:value={nom} />
-  <input type="email" placeholder="Email" bind:value={email} />
+  <!-- <input type="email" placeholder="Email" bind:value={email} /> -->
   <button on:click={handleCreate}>Create</button>
 </div>
 

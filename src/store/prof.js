@@ -1,20 +1,20 @@
 // src/store/prof.js
 import { writable } from 'svelte/store';
+const api = "http://localhost:8080/graphql";
 
 export const profs = writable([]);
 
 export async function fetchProfs() {
-  const response = await fetch('/graphql', {
+  const response = await fetch(api, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       query: `
         query {
-          getProfesseurs {
+          allProfesseur {
             id
             prenom
             nom
-            specialite
           }
         }
       `,
@@ -22,21 +22,20 @@ export async function fetchProfs() {
   });
 
   const { data } = await response.json();
-  profs.set(data.getProfesseurs);
+  profs.set(data.allProfesseur);
 }
 
 export async function createProf(prenom, nom, specialite) {
-  const response = await fetch('/graphql', {
+  const response = await fetch(api, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       query: `
         mutation {
-          createProf(prenom: "${prenom}", nom: "${nom}", specialite: "${specialite}") {
+          CreateProf(prenom: "${prenom}", nom: "${nom}") {
             id
             prenom
             nom
-            specialite
           }
         }
       `,

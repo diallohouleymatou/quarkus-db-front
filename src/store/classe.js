@@ -28,12 +28,11 @@ export async function fetchClasses() {
     const { data, errors } = await response.json();
     if (errors) {
       console.error('GraphQL Errors:', errors);
-      return;  // Exit if there are GraphQL errors
+      return; 
     }
 
     if (data && data.allClasses) {
-      classes.set(data.allClasses);  // Populate the store with fetched data
-    } else {
+      classes.set(data.allClasses); 
       console.error('No classes found in the response');
     }
   } catch (error) {
@@ -49,7 +48,7 @@ export async function createClasse(code, niveau, taille) {
       body: JSON.stringify({
         query: `
           mutation {
-            createClasse(code: "${code}", niveau: "${niveau}", capacite: ${taille}) {
+            CreateClasse(code: "${code}", niveau: "${niveau}", capacite: ${taille}) {
               id
               code
               niveau
@@ -61,8 +60,8 @@ export async function createClasse(code, niveau, taille) {
     });
 
     const { data } = await response.json();
-    if (data && data.createClasse) {
-      classes.update((prevClasses) => [...prevClasses, data.createClasse]);
+    if (data && data.CreateClasse) {
+      classes.update((prevClasses) => [...prevClasses, data.CreateClasse]);
     }
   } catch (error) {
     console.error('Error creating class:', error);
@@ -71,23 +70,32 @@ export async function createClasse(code, niveau, taille) {
 
 export async function deleteClasse(id) {
   try {
-    const response = await fetch('http://localhost:8080/graphql', {  // Update to the correct backend URL
+    const response = await fetch('http://localhost:8080/graphql', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         query: `
-          mutation {
-            deleteClasse(id: "${id}") {
-              id
-            }
+          mutation DeleteClasse {
+              deleteClasse(id: ${id})
           }
         `,
       }),
     });
 
-    const { data } = await response.json();
-    if (data && data.deleteClasse) {
-      classes.update((prevClasses) => prevClasses.filter((classe) => classe.id !== data.deleteClasse.id));
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const { data, errors } = await response.json();
+    if (errors) {
+      console.error('GraphQL Errors:', errors);
+      return; 
+    }
+
+    if (data?.deleteClasse) {
+      console.log(`Class with ID ${id} deleted successfully.`);
+    } else {
+      console.error('Delete operation failed');
     }
   } catch (error) {
     console.error('Error deleting class:', error);

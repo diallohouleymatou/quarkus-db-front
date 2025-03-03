@@ -1,4 +1,4 @@
-// src/App.svelte
+
 <script>
   import CreateEtudiant from './../components/CreateEtudiant.svelte';
   import CreateProf from './../components/CreateProf.svelte';
@@ -10,7 +10,7 @@
   import ProfList from './../components/ProfList.svelte';
   import Navbar from './../components/Navbar.svelte';
   
-  let activeTab = 'etudiants';
+  let activeTab = 'classes';
 
   function handleNavigation(event) {
     activeTab = event.detail;

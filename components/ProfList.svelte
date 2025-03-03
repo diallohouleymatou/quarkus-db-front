@@ -1,10 +1,11 @@
 // src/components/ProfList.svelte
 <script>
   import { onMount } from "svelte";
-  import { profs, fetchProfs } from "../src/store/prof";
+  import { profs, fetchProfs } from "./../src/store/prof.js";
 
   onMount(() => {
     fetchProfs();
+    console.log(profs)
   });
 
   async function deleteProf(id) {
@@ -23,6 +24,7 @@
     });
     await fetchProfs();
   }
+  
 </script>
 
 <main>
@@ -37,7 +39,6 @@
       <li class="card">
         <div class="content">
           <h2>{prof.prenom} {prof.nom}</h2>
-          <p>{prof.specialite}</p>
           <button on:click={() => deleteProf(prof.id)}>Delete</button>
         </div>
       </li>

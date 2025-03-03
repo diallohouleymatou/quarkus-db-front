@@ -1,4 +1,3 @@
-// src/components/Navbar.svelte
 <script>
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();

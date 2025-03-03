@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { classes, fetchClasses } from "./../src/store/classe.js";
+  import { classes, fetchClasses, deleteClasse } from "./../src/store/classe.js";
 
   let isLoading = true;
   let error = null;
@@ -8,6 +8,7 @@
   onMount(async () => {
     try {
       fetchClasses();
+      console.log(classes);
       console.log("Loading classes");
     } catch (err) {
       error = "Failed to fetch classes";
@@ -16,26 +17,6 @@
     }
   });
 
-  async function deleteClasse(id) {
-    try {
-      const response = await fetch("/graphql", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          query: `
-            mutation {
-              deleteClasse(id: "${id}") {
-                id
-              }
-            }
-          `,
-        }),
-      });
-      await fetchClasses(); // Refresh list after deletion
-    } catch (err) {
-      error = "Failed to delete class";
-    }
-  }
 </script>
 
 <main>

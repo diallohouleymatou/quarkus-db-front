@@ -13,27 +13,18 @@ export async function fetchCours() {
             allCours {
               id
               matiere
-              edt {
-                id
-                horaire
-                jour
-                classe {
-                    id
-                    capacite
-                    code
-                    niveau
-                }
-                cours {
-                    id
-                    matiere
-                }
-                prof {
-                    id
-                    nom
-                    prenom
-                    matiereslist
-                }
-              }
+              classe {
+            id
+            capacite
+            code
+            niveau
+        }
+        professeur {
+            id
+            matiereslist
+            nom
+            prenom
+        }
             }
           }
         `,

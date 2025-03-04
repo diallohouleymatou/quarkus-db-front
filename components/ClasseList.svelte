@@ -13,10 +13,10 @@
   onMount(async () => {
     try {
       await fetchClasses();
-      console.log("Classes loaded:", $classes);
+      console.log("Classes chargées:", $classes);
       filterClasses();
     } catch (err) {
-      error = "Failed to fetch classes";
+      error = "Échec du chargement des classes";
     } finally {
       isLoading = false;
     }
@@ -46,13 +46,13 @@
         <span class="search-icon">🔍</span>
         <input 
           type="text" 
-          placeholder="Search classes..." 
+          placeholder="Rechercher des classes..." 
           bind:value={searchQuery}
         />
       </div>
       <button class="add-button" on:click={() => showAddClassModal = true}>
         <span class="add-icon">+</span>
-        <span class="add-text">Add Class</span>
+        <span class="add-text">Ajouter une classe</span>
       </button>
     </div>
   </div>
@@ -60,27 +60,24 @@
   {#if isLoading}
     <div class="loading-container">
       <div class="loading-spinner"></div>
-      <p>Loading classes...</p>
+      <p>Chargement des classes...</p>
     </div>
   {:else if error}
     <div class="error-container">
       <span class="error-icon">⚠️</span>
       <p class="error">{error}</p>
-      <button class="retry-button" on:click={() => fetchClasses()}>Retry</button>
+      <button class="retry-button" on:click={() => fetchClasses()}>Réessayer</button>
     </div>
   {:else if $classes.length === 0}
     <div class="empty-state">
       <div class="empty-illustration">📚</div>
-      <p>No classes found</p>
-      <button class="add-button small" on:click={() => showAddClassModal = true}>
-        Add Your First Class
-      </button>
+      <p>Aucune classe trouvée</p>
     </div>
   {:else}
     <div class="list-header">
-      <div class="list-column">Class Code</div>
-      <div class="list-column">Level</div>
-      <div class="list-column">Capacity</div>
+      <div class="list-column">Code de la classe</div>
+      <div class="list-column">Niveau</div>
+      <div class="list-column">Capacité</div>
       <div class="list-column actions-column">Actions</div>
     </div>
 
@@ -88,8 +85,8 @@
       {#each $filteredClassesStore as classe (classe.id)}
         <li class="class-item">
           <div class="class-column class-code">{classe.code}</div>
-          <div class="class-column">Level {classe.niveau}</div>
-          <div class="class-column">{classe.capacite} students</div>
+          <div class="class-column">Niveau {classe.niveau}</div>
+          <div class="class-column">{classe.capacite} élèves</div>
           <div class="class-column actions">
             <button class="icon-button edit">
               <span class="material-icon">✏️</span>

@@ -3,18 +3,15 @@
   let prenom = '';
   let nom = '';
   let specialite = '';
-  let matieres = []; // String input for matieres
+  let matieres = [];
 
-  // Function to handle form submission
   async function handleCreate() {
-    // Split the matieres string by commas and trim any spaces
     const matieresArray = matieres.split(',').map(m => m.trim()).filter(m => m.length > 0);
     
-    // You can now use matieresArray as an array of subjects (matieres)
-    await createProf(prenom, nom, matieresArray); // Pass matieresArray to createProf
+    await createProf(prenom, nom, matieresArray);
     prenom = '';
     nom = '';
-    matieres = ''; // Reset matieres input
+    matieres = '';
   }
 </script>
 
@@ -23,7 +20,6 @@
   <input type="text" placeholder="Prenom" bind:value={prenom} />
   <input type="text" placeholder="Nom" bind:value={nom} />
   
-  <!-- New input for matieres with instructions -->
   <label for="matieres">Matières (separated by commas):</label>
   <input
     type="text"
@@ -44,7 +40,6 @@
     max-width: 400px;
     margin: 20px auto;
   }
-
   .create-form input {
     width: 100%;
     padding: 10px;
@@ -52,14 +47,12 @@
     border: 1px solid #ccc;
     border-radius: 4px;
   }
-
   .create-form label {
     font-size: 14px;
     font-weight: bold;
     margin-bottom: 5px;
     display: block;
   }
-
   .create-form button {
     width: 100%;
     padding: 10px;
@@ -69,7 +62,6 @@
     border-radius: 4px;
     cursor: pointer;
   }
-
   .create-form button:hover {
     background-color: #0056b3;
   }

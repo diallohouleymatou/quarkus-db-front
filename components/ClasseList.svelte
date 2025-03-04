@@ -1,17 +1,20 @@
 <script>
   import { onMount } from "svelte";
   import { classes, fetchClasses, deleteClasse } from "./../src/store/classe.js";
+  import { writable } from 'svelte/store';
 
   let isLoading = true;
   let error = null;
   let searchQuery = "";
   let showAddClassModal = false;
 
+  let filteredClassesStore = writable([]);
+
   onMount(async () => {
     try {
-      fetchClasses();
-      console.log(classes);
-      console.log("Loading classes");
+      await fetchClasses();
+      console.log("Classes loaded:", $classes);
+      filterClasses();
     } catch (err) {
       error = "Failed to fetch classes";
     } finally {
@@ -19,15 +22,20 @@
     }
   });
 
-  function filteredClasses() {
-    if (!searchQuery.trim()) return $classes;
-    
-    const query = searchQuery.toLowerCase();
-    return $classes.filter(classe => 
-      classe.code.toLowerCase().includes(query) || 
-      classe.niveau.toString().includes(query)
-    );
+  function filterClasses() {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) {
+      filteredClassesStore.set($classes);
+    } else {
+      const filtered = $classes.filter(classe =>
+        classe.code.toLowerCase().includes(query) || 
+        classe.niveau.toString().includes(query)
+      );
+      filteredClassesStore.set(filtered);
+    }
   }
+
+  $: searchQuery, filterClasses();
 </script>
 
 <main class="google-classes">
@@ -77,7 +85,7 @@
     </div>
 
     <ul class="class-list">
-      {#each filteredClasses() as classe (classe.id)}
+      {#each $filteredClassesStore as classe (classe.id)}
         <li class="class-item">
           <div class="class-column class-code">{classe.code}</div>
           <div class="class-column">Level {classe.niveau}</div>

@@ -9,9 +9,9 @@
     try {
       fetchCours();
       console.log(cours);
-      console.log("Loading cours");
+      console.log("Chargement des cours");
     } catch (err) {
-      error = "Failed to fetch cours";
+      error = "Échec du chargement des cours";
     } finally {
       isLoading = false;
     }
@@ -22,25 +22,24 @@
   <div class="header">
     <h1>Cours</h1>
     <div class="actions">
-      <!-- You can add any buttons or actions here -->
     </div>
   </div>
 
   {#if isLoading}
     <div class="loading-container">
       <div class="loading-spinner"></div>
-      <p>Loading cours...</p>
+      <p>Chargement des cours...</p>
     </div>
   {:else if error}
     <div class="error-container">
       <span class="error-icon">⚠️</span>
       <p class="error">{error}</p>
-      <button class="retry-button" on:click={() => fetchCours()}>Retry</button>
+      <button class="retry-button" on:click={() => fetchCours()}>Réessayer</button>
     </div>
   {:else if $cours.length === 0}
     <div class="empty-state">
       <div class="empty-illustration">📚</div>
-      <p>No cours found</p>
+      <p>Aucun cours trouvé</p>
     </div>
   {:else}
     <ul class="cours-list">
